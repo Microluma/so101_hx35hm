@@ -5,10 +5,10 @@
   <version>0.0.1</version>
   <description>Bridge between SO101 ros2_control controllers and HX-35HM bus servos via ros_robot_controller Board SDK.</description>
 
-  <maintainer email="you@example.com">so101_user</maintainer>
+  <maintainer email="176223147+Microluma@users.noreply.github.com">Guanyu Sun</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_python</buildtool_depend>
 
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>

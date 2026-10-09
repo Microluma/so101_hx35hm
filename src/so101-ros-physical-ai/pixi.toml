@@ -22,8 +22,8 @@ rerun-sdk = ">=0.29.1, <0.30"
 # - sources your overlay (if built)
 # - runs with pixi's python (so rerun is available)
 # - forwards all extra args to the Python script
-bridge = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true && exec python scripts/so101_ros2_to_rerun.py \"$@\"' -- " }
-replay = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true && exec python scripts/so101_episode_viewer_ros2.py \"$@\"' -- " }
+bridge = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true && exec python scripts/so101_ros2_to_rerun.py \"$@\"' -- " }
+replay = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true && exec python scripts/so101_episode_viewer_ros2.py \"$@\"' -- " }
 
 
 # Launch the native Rerun viewer (connect the bridge with --connect)
@@ -48,9 +48,9 @@ parquet-tools = ">=0.2.16, <0.3"
 
 [feature.lerobot.tasks]
 lerobot-info = "lerobot-info"
-convert = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m rosbag_to_lerobot.cli \"$@\"' --" }
-infer = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m so101_inference.lerobot_inference_node \"$@\"' --" }
-async_infer = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m so101_inference.async_inference_node \"$@\"' --" }
+convert = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m rosbag_to_lerobot.cli \"$@\"' --" }
+infer = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m so101_inference.lerobot_inference_node \"$@\"' --" }
+async_infer = { cmd = "bash -c 'source /opt/ros/jazzy/setup.bash && source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash 2>/dev/null || true; if [ \"${1-}\" = \"--\" ]; then shift; fi; exec python -m so101_inference.async_inference_node \"$@\"' --" }
 
 
 # --- Environments ---
@@ -60,6 +60,5 @@ default = ["bridge"]
 
 # Second env: LeRobot
 lerobot = ["lerobot"]
-
 
 

@@ -1,19 +1,31 @@
 # SO101 HX35HM ROS 2 Workspace
 
-这是一个面向 `SO101 follower + HX-35HM + MoveIt 2 + 顶视 RGBD 相机` 的完整 ROS 2 工作区仓库。
+[![Repository checks](https://github.com/Microluma/so101_hx35hm/actions/workflows/repository-checks.yml/badge.svg)](https://github.com/Microluma/so101_hx35hm/actions/workflows/repository-checks.yml)
 
-仓库里包含：
+一个面向 `SO101 follower + HX-35HM + MoveIt 2 + RGBD 视觉` 的 ROS 2 Jazzy 真机工作区。项目的核心不是单一 demo，而是把舵机总线、轨迹执行、视觉定位、MoveIt 规划和真机抓取整合成可调试的完整链路。
 
-- 真实机械臂桥接与轨迹执行
-- MoveIt 2 规划与 RViz 控制
-- 红球视觉抓取链路
-- 顶视相机与桌面估计
-- 手眼标定、相机内参标定工具
-- 一套偏工程化的中文操作文档
+> 项目定位：本仓库是一个本科阶段的机器人系统工程项目，重点展示真机集成、问题定位和实验验证能力。它基于现有开源组件开发，上游与项目特定工作的边界见下文。
 
-如果你现在的目标是把机械臂跑起来、能规划、能抓红球，这个仓库就是完整工作区，不是单一功能包。
+## 解决了什么问题
 
-## 🎬 Demo
+SO101 生态中的默认控制链不能直接覆盖当前 HX-35HM + STM32 硬件组合。本项目围绕下列问题展开：
+
+- 如何将 ROS 2 关节命令和 `FollowJointTrajectory` 轨迹转换为 HX-35HM 真机控制。
+- 如何在有限串口带宽下平衡主臂回读频率、从臂写入频率、平滑度和跟随误差。
+- 如何将 RGBD 相机的红球检测结果通过内参、手眼外参和 TF 链转换到机械臂基座坐标系。
+- 如何让 MoveIt 规划、桌面碰撞约束和 `hover -> pregrasp -> grasp -> retreat -> rest` 抓取状态机在真机上稳定协同。
+
+## 当前能力
+
+- HX-35HM 真机桥接、舵机映射、零位与方向校准
+- MoveIt 2 规划、RViz 交互与轨迹执行
+- 主臂到从臂的遥操与 FJT 执行链调优
+- 顶视 RGB/RGBD 相机、红球检测与桌面高度估计
+- 相机内参、手眼外参和 RGB-depth 对齐调试工具
+- 红球定位、运动规划、抓取、回位和放球的完整流程
+- rosbag2/MCAP 录制、LeRobot 数据转换与推理链路
+
+## Demo
 
 ### 红球视觉识别与抓取
 
@@ -23,90 +35,91 @@ https://github.com/user-attachments/assets/63459b54-5808-4aff-9fd8-a557a9e66077
 
 ### 主从臂跟随控制
 
-从臂实时跟随主臂动作，展示 HX-35HM 主从遥操作控制效果。
+从臂实时跟随主臂动作，展示 HX-35HM 主从遥操控制效果。
 
 https://github.com/user-attachments/assets/6b907dc1-2aa6-41a9-9c77-5fd130d048e7
 
-## 预览 / Preview
+### 硬件与 RViz 预览
 
-![SO101 + HX35HM hardware setup](assets/hardware_setup.jpg)
+| 真机平台 | MoveIt / RViz 规划界面 |
+| --- | --- |
+| ![SO101 与 HX-35HM 真机平台](assets/hardware_setup.jpg) | ![SO101 MoveIt 与 RViz 规划界面](assets/rviz_planning_overview.png) |
 
-![RViz planning overview](assets/rviz_planning_overview.png)
+## 关键工作与贡献边界
 
-## 系统概览
+本项目并非从零实现所有 ROS 2 和 SO101 组件。为便于学术展示和开源复用，各部分的角色如下。
 
-当前主链路大致是：
+| 部分 | 来源/角色 | 本项目的工作重点 |
+| --- | --- | --- |
+| `src/so101-ros-physical-ai/` | 上游 SO101 ROS 2 工程基础 | 纳入完整工作区，针对 HX-35HM、FJT、MoveIt、相机与抓取流程进行集成和调试 |
+| `src/ros_robot_controller-ros2/` | STM32/总线舵机 SDK 与 ROS 包 | 作为底层通信依赖；原始授权信息仍需进一步核对 |
+| `src/so101_hx35hm_bridge/` | 本项目特定集成层 | HX-35HM 命令转换、状态回读、标定、硬件调试、视觉节点与运行工具 |
+| `docs/` 与 `calibration/` | 工程记录和实机数据 | 系统集成、故障定位、参数对比、标定和真机流程沉淀 |
 
-1. `so101_hx35hm_bridge`
-   把 ROS 轨迹和夹爪命令转换成 HX-35HM 真机控制。
-2. `so101_moveit_config` + `so101_bringup`
-   提供 MoveIt、相机、TF、bridge、RViz 的总装配入口。
-3. `so101_kinematics`
-   提供 `/go_to_pose`、`/go_to_joints` 等 IK/轨迹服务。
-4. `so101_grasping`
-   负责从视觉目标生成 `hover_high -> pregrasp -> grasp -> retreat -> rest` 抓取序列。
-5. 顶视视觉链路
-   包括 ArUco、红球检测、桌面高度估计、手眼标定工具。
+更详细的来源与授权状态见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
-## 环境
+## 系统架构
 
-推荐环境：
+```mermaid
+flowchart LR
+    Leader["SO101 Leader\nHX-35HM"] -->|joint states| Teleop["Teleop / FJT relay"]
+    Teleop -->|trajectory / joint command| Bridge["so101_hx35hm_bridge"]
+    Bridge -->|serial bus| STM32["STM32 controller"]
+    STM32 --> Follower["SO101 Follower"]
+    Follower -->|joint feedback| Bridge
+
+    Camera["Overhead RGBD camera"] --> Vision["red-ball detector\ntable estimator"]
+    Vision -->|target pose + table height| TF["camera calibration / TF"]
+    TF --> MoveIt["MoveIt 2 + kinematics"]
+    MoveIt --> Grasp["grasp state machine"]
+    Grasp -->|FollowJointTrajectory| Bridge
+```
+
+主链路的 ROS topic、service 和 action 映射见 [`docs/HX35HM_SO101_控制链接口速查表.md`](docs/HX35HM_SO101_控制链接口速查表.md)。
+
+## 已记录的工程结果
+
+当前仓库已有的数据主要来自真机调试日志，尚不是严格的统计 benchmark。已整理的观测和待完成的评估协议见 [`docs/RESULTS.md`](docs/RESULTS.md)。
+
+- 某次稳定抓取链调试中，`hover_high / pregrasp / grasp / retreat` 阶段记录的末端误差约为 `0.006 m`。
+- 主臂总线回读在 `240 Hz` 配置下出现串口 I/O 错误，`180 Hz` 是当前硬件上更稳定的调试点。
+- 滤波后 command 的 median step 明显小于 leader 原始采样，但 `elbow_flex` 仍暴露出独立的跟随误差，说明问题不能只靠全局平滑解决。
+- 抓取成功率、端到端延迟和多位姿重复精度仍需按固定协议补测。
+
+## 环境与硬件
 
 - Ubuntu 24.04
 - ROS 2 Jazzy
 - Python 3.12 系统环境
-- `colcon`
-- 真机模式下需要：
-  - HX-35HM 控制板串口
-  - 顶视 RGB 或 RGBD 相机
+- `colcon` 和 `rosdep`
+- SO101 follower + HX-35HM 舵机/控制板
+- 可选：SO101 leader、顶视 RGB/RGBD 相机
 
-## 目录结构
+> [!WARNING]
+> 这是真机机械臂项目。首次运行时应清空工作区、使用低速度参数、确保可立即断扭矩/断电，并确认只有一套 bringup 和控制节点在运行。仓库中的相机外参、舵机零位和桌面参数来自特定实机，不应直接用于另一套硬件。
 
-顶层关键内容：
+## 从零构建
 
-- [`src/`](src/)
-  ROS 2 源码与各功能包
-- [`docs/`](docs/)
-  中文工程文档与调试记录
-- [`calibration/handeye/`](calibration/handeye/)
-  手眼标定结果与原始样本
-- [`tools/hardware_debug/`](tools/hardware_debug/)
-  裸硬件调试脚本
-- [`src/so101-ros-physical-ai/`](src/so101-ros-physical-ai/)
-  主体 ROS 2 工程，包含 bringup、MoveIt、运动学、抓取、相机、工具
-- [`src/so101_hx35hm_bridge/`](src/so101_hx35hm_bridge/)
-  HX-35HM 桥接、红球检测、ArUco 检测、桌面估计
-- [`calibration/handeye/aruco_handeye_result.json`](calibration/handeye/aruco_handeye_result.json)
-  当前一套手眼标定结果
-- [`calibration/handeye/aruco_handeye_result_v2.json`](calibration/handeye/aruco_handeye_result_v2.json)
-  另一套手眼标定结果
-- [`tools/hardware_debug/continuous_sweep.py`](tools/hardware_debug/continuous_sweep.py)
-  舵机/机械臂扫动辅助脚本
-- [`tools/hardware_debug/return_to_home.py`](tools/hardware_debug/return_to_home.py)
-  简单回位脚本
+### 1. 获取工作区
 
-归档目录：
-
-- `archive/`
-  不参与当前主工作区构建，只用于保存历史备份或非主工程内容
-
-主要 ROS 包：
-
-- [`so101_bringup`](src/so101-ros-physical-ai/so101_bringup/)
-- [`so101_moveit_config`](src/so101-ros-physical-ai/so101_moveit_config/)
-- [`so101_grasping`](src/so101-ros-physical-ai/so101_grasping/)
-- [`so101_kinematics`](src/so101-ros-physical-ai/so101_kinematics/)
-- [`so101_hx35hm_bridge`](src/so101_hx35hm_bridge/)
-- [`so101_openni2_camera`](src/so101-ros-physical-ai/so101_openni2_camera/)
-
-## 构建
-
-建议统一使用系统 Python，并清理旧缓存影响。以下命令默认工作区位于 `~/ros2_ws`；如果你将仓库克隆到其他位置，请先将 `ROS2_WS` 设为该仓库的绝对路径。
+下面默认将仓库克隆到 `~/ros2_ws`。如果使用其他位置，请先将 `ROS2_WS` 设为该仓库的绝对路径。
 
 ```bash
 export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
+git clone https://github.com/Microluma/so101_hx35hm.git "$ROS2_WS"
 cd "$ROS2_WS"
+```
+
+### 2. 安装依赖并构建
+
+系统首次使用 `rosdep` 时需先执行 `sudo rosdep init`。可选相机驱动可能需要根据设备单独安装。
+
+```bash
 source /opt/ros/jazzy/setup.bash
+sudo apt update
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build \
   --symlink-install \
@@ -115,22 +128,9 @@ colcon build \
 source "$ROS2_WS/install/setup.bash"
 ```
 
-如果你只改了抓取相关：
+如果构建日志出现旧 Python 路径，例如 `~/.local/bin/python3.11`，通常是旧 CMake 缓存而不是当前源码问题。
 
-```bash
-colcon build --packages-select so101_grasping so101_bringup so101_kinematics so101_hx35hm_bridge \
-  --symlink-install \
-  --cmake-clean-cache \
-  --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-```
-
-如果构建日志里出现旧 Python 路径，例如 `~/.local/bin/python3.11`，通常是旧 CMake 缓存，不一定是源码本身的问题。
-
-## 快速开始
-
-### 1. 启动真机 MoveIt 控制栈
-
-这是当前较稳定的真机总入口：
+### 3. 启动真机 MoveIt 控制栈
 
 ```bash
 export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
@@ -148,22 +148,12 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   cameras_config:="$ROS2_WS/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml"
 ```
 
-这会拉起：
+### 4. 执行一次红球抓取
 
-- `hx35hm_bridge`
-- `move_group`
-- 顶视相机
-- 红球检测 `red_circle_detector`
-- 桌面估计 `table_plane_estimator`
-- `cartesian_motion_node`
-
-### 2. 执行一次红球抓取
-
-另开终端：
+在另一终端执行：
 
 ```bash
 export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
-cd "$ROS2_WS"
 source /opt/ros/jazzy/setup.bash
 source "$ROS2_WS/install/setup.bash"
 
@@ -176,24 +166,12 @@ ros2 launch so101_grasping so101_visual_grasp.launch.py \
   min_pregrasp_clearance_m:=0.080 \
   return_to_named_pose_after_grasp:=true \
   post_grasp_named_pose:=rest \
-  post_grasp_use_ik_joints:=false \
   grasp_retry_count:=1 \
   post_grasp_return_retry_count:=3 \
   open_gripper_after_return:=true
 ```
 
-当前推荐抓取流程是：
-
-- 打开夹爪
-- 采样稳定红球位姿
-- 读取实时桌面高度 `/vision/table/top_z`
-- `hover_high -> pregrasp -> grasp`
-- 闭合夹爪
-- retreat
-- MoveIt 规划回 `rest`
-- 打开夹爪放球
-
-### 3. 快速健康检查
+### 5. 健康检查
 
 ```bash
 ros2 node list
@@ -201,7 +179,7 @@ ros2 action list
 ros2 topic list | rg '/vision|/static_camera|/joint_states'
 ```
 
-你通常应该能看到：
+通常应能看到：
 
 - `/move_group`
 - `/follower/hx35hm_bridge`
@@ -210,93 +188,37 @@ ros2 topic list | rg '/vision|/static_camera|/joint_states'
 - `/vision/red_block/pose_base`
 - `/vision/table/top_z`
 
-## 标定与文档入口
+## 文档导航
 
-如果你第一次接这套系统，建议按下面顺序看文档：
+建议从 [`docs/README.md`](docs/README.md) 进入，其中已将文档分为上手、系统设计、标定、实验结果和历史调试记录。
 
-- 抓取流程：
-  [`HX35HM_SO101_红球抓取完整执行步骤.md`](docs/HX35HM_SO101_红球抓取完整执行步骤.md)
-- MoveIt 启动与规划控制：
-  [`HX35HM_SO101_MoveIt规划控制启动流程.md`](docs/HX35HM_SO101_MoveIt规划控制启动流程.md)
-- 相机内参标定：
-  [`HX35HM_SO101_相机内参标定完整步骤.md`](docs/HX35HM_SO101_相机内参标定完整步骤.md)
-- 装配姿态与归零建议：
-  [`HX35HM_SO101_装配姿态与归零建议.md`](docs/HX35HM_SO101_装配姿态与归零建议.md)
+- [实验结果与评估计划](docs/RESULTS.md)
+- [红球抓取完整执行步骤](docs/HX35HM_SO101_红球抓取完整执行步骤.md)
+- [MoveIt 规划控制启动流程](docs/HX35HM_SO101_MoveIt规划控制启动流程.md)
+- [主从控制当前使用流程](docs/HX35HM_SO101_主从控制当前使用流程.md)
+- [相机内参标定完整步骤](docs/HX35HM_SO101_相机内参标定完整步骤.md)
+- [控制链接口速查表](docs/HX35HM_SO101_控制链接口速查表.md)
 
-中文工程文档导航：
+## 仓库结构
 
-- 抓取调试日志：
-  [`HX35HM_SO101_红球抓取调试日志.md`](docs/HX35HM_SO101_红球抓取调试日志.md)
-- 机械臂控制链详解：
-  [`HX35HM_SO101_机械臂控制链详解.md`](docs/HX35HM_SO101_机械臂控制链详解.md)
-- 控制链接口速查表：
-  [`HX35HM_SO101_控制链接口速查表.md`](docs/HX35HM_SO101_控制链接口速查表.md)
-- 手动调参指南：
-  [`HX35HM_SO101_手动调参指南.md`](docs/HX35HM_SO101_手动调参指南.md)
-- 环境清理与进程管理：
-  [`HX35HM_SO101_环境清理与进程管理.md`](docs/HX35HM_SO101_环境清理与进程管理.md)
-- 摄像头调位与可视化执行步骤：
-  [`HX35HM_SO101_摄像头调位与可视化执行步骤.md`](docs/HX35HM_SO101_摄像头调位与可视化执行步骤.md)
-- 超详细装配流程：
-  [`HX35HM_SO101_超详细装配流程.md`](docs/HX35HM_SO101_超详细装配流程.md)
+- [`src/`](src/)：ROS 2 功能包、上游组件和硬件 SDK
+- [`src/so101_hx35hm_bridge/`](src/so101_hx35hm_bridge/)：HX-35HM 桥接、视觉节点和调试工具
+- [`src/so101-ros-physical-ai/`](src/so101-ros-physical-ai/)：SO101 ROS 2、MoveIt、运动学、录制和推理基础
+- [`docs/`](docs/)：操作文档、系统分析、实验与故障定位记录
+- [`calibration/handeye/`](calibration/handeye/)：手眼标定样本和结果
+- [`tools/hardware_debug/`](tools/hardware_debug/)：裸硬件调试脚本
 
-手眼标定相关工具在：
+## 当前限制
 
-- [`tools/handeye/collect_aruco_handeye_samples.py`](src/so101-ros-physical-ai/tools/handeye/collect_aruco_handeye_samples.py)
-- [`tools/handeye/auto_motion_aruco_sampler.py`](src/so101-ros-physical-ai/tools/handeye/auto_motion_aruco_sampler.py)
-- [`tools/handeye/solve_aruco_handeye.py`](src/so101-ros-physical-ai/tools/handeye/solve_aruco_handeye.py)
+- 尚未完成固定测试协议下的抓取成功率统计。
+- 部分真机配置来自当前硬件，换机后必须重新标定。
+- 真机功能无法在 GitHub CI 中完整覆盖；CI 目前主要验证路径可移植性、文档链接和 Python 语法。
+- `ros_robot_controller-ros2` 的上游授权声明仍需进一步核对。
 
-相机内参标定工具在：
+## 许可与第三方组件
 
-- [`tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py`](src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py)
+本仓库包含多个上游组件，且存在 Apache-2.0、MIT 和 BSD-3-Clause 等不同声明。当前不应将整个工作区简化为单一许可证。详见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
-## 当前仓库的一些工程约定
+## 维护者
 
-- `build/`、`install/`、`log/` 已忽略，不进仓库
-- 相机标定文件优先使用 `package://` 路径，不再依赖本机固定的 `file://` 绝对路径
-- hand-eye 工具默认输出已改成相对路径，更适合迁移到其他机器
-- `src/so101-ros-physical-ai` 现在已经作为普通源码目录纳入仓库，不再依赖外部子仓库指针
-- 中文工程文档已经统一整理到 `docs/`，避免和 ROS 包源码混放
-
-## 常见注意事项
-
-- 真机调试时，一次只保留一套 bringup 在运行，避免多个 `move_group`、多个 detector 同时存在。
-- 如果抓取逻辑“看起来在执行，但动作奇怪”，先检查 ROS 图里是不是有重复节点。
-- 如果 MoveIt 回 `rest` 偶发失败，优先检查：
-  - 桌面碰撞体参数
-  - 当前关节状态回读是否漂移
-  - 是否使用了当前推荐的 `post_grasp_return_retry_count`
-- 如果红球位置偏差明显，优先检查：
-  - 相机内参
-  - 手眼标定结果
-  - 相机 TF
-  - 视觉偏置参数，而不是先怀疑规划器
-
-## 仓库状态
-
-这是一个偏工程实践导向的工作区仓库，不是只保留最小功能示例。
-
-所以仓库里除了运行必需的 ROS 包，也保留了：
-
-- 中文操作文档
-- 标定结果与标定原始样本（`calibration/handeye/`）
-- 裸硬件调试脚本（`tools/hardware_debug/`）
-- 部分相机配置
-- 机械臂描述与模型资源
-
-同时，已经明确归档、不参与当前主链路的内容会放到：
-
-- `archive/`
-
-如果你只是想找某个功能入口，最常用的路径通常是：
-
-- 真机总入口：
-  [`follower_hx35hm_moveit.launch.py`](src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
-- 红球抓取：
-  [`so101_visual_grasp.cpp`](src/so101-ros-physical-ai/so101_grasping/src/so101_visual_grasp.cpp)
-- HX35HM 桥接：
-  [`bridge_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
-- 红球检测：
-  [`red_circle_detector_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/red_circle_detector_node.py)
-- 桌面估计：
-  [`table_plane_estimator_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/table_plane_estimator_node.py)
+Guanyu Sun（[@Microluma](https://github.com/Microluma)）

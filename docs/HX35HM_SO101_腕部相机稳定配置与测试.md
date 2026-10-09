@@ -46,10 +46,10 @@ ls -l /dev/v4l/by-id /dev/v4l/by-path
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_wrist_only.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_wrist_only.yaml
 ```
 
 检查话题：
@@ -72,10 +72,10 @@ rqt_image_view /follower/image_raw
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_dual_rgb.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_dual_rgb.yaml
 ```
 
 应同时看到：

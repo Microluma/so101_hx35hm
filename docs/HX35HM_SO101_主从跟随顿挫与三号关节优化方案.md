@@ -63,7 +63,7 @@ command_vs_follower elbow_flex p95_abs_error    ~= 63.3 deg
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 node list
 ros2 param get /follower_command_relay filter_mode
@@ -155,9 +155,9 @@ rad_error_command_minus_follower
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
-python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/diagnose_elbow_following.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/diagnose_elbow_following.py \
   --duration 15 \
   --output-csv /tmp/so101_elbow_following.csv \
   --output-json /tmp/so101_elbow_following_summary.json
@@ -243,7 +243,7 @@ joint_offsets: [0.062832, 0.0, 0.0, 0.0, 0.0, 0.0]
 验证：
 
 ```bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 colcon build --packages-select so101_teleop --symlink-install
 source install/setup.bash
@@ -430,7 +430,7 @@ pkill -f 'teleop_hx35hm.launch.py|follower_command_relay|hx35hm_bridge|leader_hx
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 daemon stop
 ros2 daemon start
 ros2 node list

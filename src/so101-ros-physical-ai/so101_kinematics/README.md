@@ -75,4 +75,4 @@ ros2 run so101_kinematics robokin_test_node
 
 ## License
 
-Apache-2.0 — see [LICENSE](../../LICENSE).
+Apache-2.0 — see [LICENSE](../LICENSE).

@@ -72,7 +72,7 @@
 
 旧版常见配置入口是：
 
-- [so101_cameras_astra_overhead_rgbd.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
+- [so101_cameras_astra_overhead_rgbd.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
 - 旧逻辑里它会起：
   - `gscam`
   - `so101_openni2_camera`
@@ -106,7 +106,7 @@
 
 ### 5.1 相机启动逻辑
 
-- [cameras.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/cameras.launch.py)
+- [cameras.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/cameras.launch.py)
 
 这次它新增支持：
 
@@ -117,9 +117,9 @@
 
 ### 5.2 Astra RGBD 配置
 
-- [so101_cameras_astra_overhead_rgbd.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
-- [so101_cameras_astra_overhead_rgbd_lowbw.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_lowbw.yaml)
-- [so101_cameras_astra_overhead_rgbd_720.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_720.yaml)
+- [so101_cameras_astra_overhead_rgbd.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
+- [so101_cameras_astra_overhead_rgbd_lowbw.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_lowbw.yaml)
+- [so101_cameras_astra_overhead_rgbd_720.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_720.yaml)
 
 这三份文件原来是：
 
@@ -135,8 +135,8 @@
 
 ### 5.3 新增兼容节点
 
-- [camera_topic_compat_node.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/camera_topic_compat_node.py)
-- [setup.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/setup.py)
+- [camera_topic_compat_node.py](../src/so101_hx35hm_bridge/so101_hx35hm_bridge/camera_topic_compat_node.py)
+- [setup.py](../src/so101_hx35hm_bridge/setup.py)
 
 这个节点的职责非常单纯：
 
@@ -150,7 +150,7 @@
 
 ### 5.4 相机 TF 兼容
 
-- [camera_tf_moveit.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/camera_tf_moveit.launch.py)
+- [camera_tf_moveit.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/camera_tf_moveit.launch.py)
 
 这次额外补了两个 frame：
 
@@ -169,9 +169,9 @@
 
 ### 5.5 新增 Orbbec 专用标定文件
 
-- [static_camera_color_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib.yaml)
-- [static_camera_color_calib_placeholder_320.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib_placeholder_320.yaml)
-- [static_camera_color_calib_placeholder_720.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib_placeholder_720.yaml)
+- [static_camera_color_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib.yaml)
+- [static_camera_color_calib_placeholder_320.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib_placeholder_320.yaml)
+- [static_camera_color_calib_placeholder_720.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/static_camera_color_calib_placeholder_720.yaml)
 
 目的不是重新标定，而是先把官方驱动的 `camera_name` 对齐，避免启动日志一直报：
 

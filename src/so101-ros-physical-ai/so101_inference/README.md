@@ -36,7 +36,7 @@ The robot hardware stack (follower arm + cameras) must already be running and pu
 
 ```bash
 # Build (if not using pixi)
-cd ~/ros2_ws && colcon build --packages-select so101_inference
+cd ${ROS2_WS:-$HOME/ros2_ws} && colcon build --packages-select so101_inference
 source install/setup.bash
 ```
 

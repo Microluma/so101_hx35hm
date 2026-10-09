@@ -39,8 +39,8 @@
 ### 3.1 克隆（含子模块）
 
 ```bash
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+mkdir -p ${ROS2_WS:-$HOME/ros2_ws}/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 git clone --recurse-submodules https://github.com/legalaspro/so101-ros-physical-ai.git
 ```
 
@@ -52,7 +52,7 @@ git clone --recurse-submodules https://github.com/legalaspro/so101-ros-physical-
 sudo rosdep init
 rosdep update
 
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
@@ -61,12 +61,12 @@ rosdep install --from-paths src --ignore-src -r -y
 ```bash
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --symlink-install --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
 source install/setup.bash
 ```
 
-如果你曾经在这台机器上用过别的 Python 环境，或者构建日志里出现旧路径比如 `/home/rog/.local/bin/python3.11`，建议额外加一次：
+如果你曾经在这台机器上用过别的 Python 环境，或者构建日志里出现旧路径比如 `~/.local/bin/python3.11`，建议额外加一次：
 
 ```bash
 colcon build --symlink-install \
@@ -83,7 +83,7 @@ colcon build --symlink-install \
 ### 4.1 Teleop（leader → follower）
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup teleop.launch.py
 ```
 
@@ -131,11 +131,11 @@ ros2 run episode_recorder teleop_episode_keyboard
 本仓库用 [Pixi](https://pixi.sh/) 提供隔离的 Python/LeRobot 环境（强烈建议用它跑转换与推理）。
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 pixi run -e lerobot convert -- \
   --input-dir ~/.ros/so101_episodes/pick_and_place \
-  --config ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+  --config ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
   --repo-id local/so101_test
 ```
 
@@ -212,7 +212,7 @@ ros2 launch so101_bringup teleop.launch.py use_cameras:=false use_camera_tf:=fal
 
 ```bash
 ros2 launch so101_bringup recording_session.launch.py \
-  cameras_config_file:=/home/$USER/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_no_cameras.yaml
+  cameras_config_file:="${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_no_cameras.yaml"
 ```
 
 ---
@@ -238,7 +238,7 @@ ros2 launch so101_bringup recording_session.launch.py \
 ## 8. MoveIt2（follower）
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup follower_moveit_demo.launch.py
 ```
 
@@ -251,7 +251,7 @@ ros2 launch so101_bringup follower_moveit_demo.launch.py
 建议设置一次环境变量（指向仓库根目录）：
 
 ```bash
-export SO101_RERUN_ENV_DIR=~/ros2_ws/src/so101-ros-physical-ai
+export SO101_RERUN_ENV_DIR=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 ```
 
 ### 9.1 Teleop + Rerun（不启 RViz）
@@ -263,7 +263,7 @@ ros2 launch so101_bringup teleop.launch.py use_rerun:=true use_teleop_rviz:=fals
 ### 9.2 独立启动 viewer + bridge
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 pixi run viewer
 pixi run bridge
 ```
@@ -277,14 +277,14 @@ pixi run bridge
 ### 10.1 先启动 follower 硬件栈 + 相机
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup inference.launch.py
 ```
 
 ### 10.2 同步推理（本机加载策略）
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 pixi run -e lerobot infer -- --ros-args \
   -p repo_id:="legalaspro/act_so101_pnp_crosslane_showcase_60_50hz_v0"
@@ -312,7 +312,7 @@ policy-server --transport=zmq --host=0.0.0.0 --port=8090 --fps=50
 机器人侧运行 async 客户端：
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 pixi run -e lerobot async_infer -- --ros-args \
   -p repo_id:="legalaspro/smolvla_so101_pnp_crosslane_showcase_60_50hz_v0" \

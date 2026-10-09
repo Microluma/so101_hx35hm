@@ -52,8 +52,8 @@
 
 相关文件：
 
-- [so101_visual_grasp.cpp](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping/src/so101_visual_grasp.cpp)
-- [so101_visual_grasp.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping/launch/so101_visual_grasp.launch.py)
+- [so101_visual_grasp.cpp](../src/so101-ros-physical-ai/so101_grasping/src/so101_visual_grasp.cpp)
+- [so101_visual_grasp.launch.py](../src/so101-ros-physical-ai/so101_grasping/launch/so101_visual_grasp.launch.py)
 
 #### `so101_simple_pick`
 
@@ -67,7 +67,7 @@
 
 相关文件：
 
-- [so101_simple_pick.cpp](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping/src/so101_simple_pick.cpp)
+- [so101_simple_pick.cpp](../src/so101-ros-physical-ai/so101_grasping/src/so101_simple_pick.cpp)
 
 ---
 
@@ -142,7 +142,7 @@
 
 核心文件：
 
-- [bridge_node.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
+- [bridge_node.py](../src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
 
 ---
 
@@ -162,7 +162,7 @@
 
 核心文件：
 
-- [ros_robot_controller_sdk.py](/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py)
+- [ros_robot_controller_sdk.py](../src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py)
 
 ---
 

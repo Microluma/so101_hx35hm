@@ -15,7 +15,7 @@ Leader-to-follower teleoperation package for the SO-101 arm. It subscribes to th
 Recommended full-stack launch:
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup teleop.launch.py
 ```
 

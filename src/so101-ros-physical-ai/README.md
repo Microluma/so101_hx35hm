@@ -97,7 +97,7 @@ After the [hardware setup guide](docs/hardware.md) and [installation](#installat
    ```bash
    pixi run -e lerobot convert -- \
      --input-dir ~/.ros/so101_episodes/pick_and_place \
-     --config ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+     --config ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
      --repo-id local/so101_test
    ```
 
@@ -236,12 +236,12 @@ The YAML files use a `joints:` top-level key with per-joint parameters such as `
 
 ```bash
 # Clone (includes submodules)
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+mkdir -p ${ROS2_WS:-$HOME/ros2_ws}/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 git clone --recurse-submodules https://github.com/legalaspro/so101-ros-physical-ai.git
 
 # Install dependencies and build
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 sudo apt update
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y
@@ -256,7 +256,7 @@ source install/setup.bash
 ### Teleop (Leader to Follower)
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup teleop.launch.py
 ```
 
@@ -307,7 +307,7 @@ The repo ships a second Pixi environment (`lerobot`) that bundles [LeRobot](http
 ```bash
 pixi run -e lerobot convert -- \
   --input-dir  ~/.ros/so101_episodes/pick_and_place \
-  --config     ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+  --config     ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
   --repo-id    local/so101_test
 ```
 
@@ -324,7 +324,7 @@ pixi run -e lerobot -- hf auth whoami
 # Convert & push
 pixi run -e lerobot convert -- \
   --input-dir  ~/.ros/so101_episodes/pick_and_place \
-  --config     ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+  --config     ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
   --repo-id    <hf-username>/so101-pick-and-place \
   --push-hub
 ```
@@ -364,14 +364,14 @@ Deploy trained LeRobot policies on the real SO-101 follower arm. Two inference m
 **Terminal 1 — bring up the follower arm + cameras (+ optional Rerun):**
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup inference.launch.py
 ```
 
 **Terminal 2 — run the policy (Pixi `lerobot` env):**
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 # Synchronous — ACT policy on-device
 pixi run -e lerobot infer -- --ros-args \
@@ -405,7 +405,7 @@ The repo ships a [Pixi](https://pixi.sh/) environment with `bridge` and `viewer`
 
 ```bash
 # Set once
-export SO101_RERUN_ENV_DIR=~/ros2_ws/src/so101-ros-physical-ai
+export SO101_RERUN_ENV_DIR=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 # Teleop with Rerun instead of RViz
 ros2 launch so101_bringup teleop.launch.py use_rerun:=true use_teleop_rviz:=false
@@ -417,7 +417,7 @@ ros2 launch so101_bringup recording_session.launch.py experiment_name:=pick_and_
 Or run the bridge standalone:
 
 ```bash
-cd ~/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 pixi run viewer   # in one terminal
 pixi run bridge   # in another (after sourcing ROS)
 ```

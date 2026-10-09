@@ -26,8 +26,12 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
 
 
-DEFAULT_CONFIG = pathlib.Path(
-    "/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_teleop/config/teleop.yaml"
+DEFAULT_CONFIG = (
+    pathlib.Path(__file__).resolve().parents[2]
+    / "so101-ros-physical-ai"
+    / "so101_teleop"
+    / "config"
+    / "teleop.yaml"
 )
 DEFAULT_JOINTS = [
     "shoulder_pan",

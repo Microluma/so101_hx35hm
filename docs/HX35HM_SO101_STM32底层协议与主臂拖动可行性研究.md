@@ -24,7 +24,7 @@ HX-35HM 舵机本体从手册看，具备“掉电/卸力后仍可手动转动�
 本地手册：
 
 ```bash
-/home/rog/ros2_ws/src/1.HX-35HM总线舵机使用说明.pdf
+${ROS2_WS:-$HOME/ros2_ws}/src/1.HX-35HM总线舵机使用说明.pdf
 ```
 
 手册关键信息：
@@ -42,7 +42,7 @@ HX-35HM 舵机本体从手册看，具备“掉电/卸力后仍可手动转动�
 PC 侧 SDK：
 
 ```bash
-/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py
+${ROS2_WS:-$HOME/ros2_ws}/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py
 ```
 
 STM32 外层数据包格式由 SDK 生成：
@@ -100,7 +100,7 @@ function = 0x05  # PACKET_FUNC_BUS_SERVO
 当前 bridge：
 
 ```bash
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py
 ```
 
 它原本既能读位置，也能订阅 `forward_controller/commands` 并向舵机发送位置命令。
@@ -246,14 +246,14 @@ pkill -f 'teleop_hx35hm.launch.py|software_leader_teleop_hx35hm.launch.py|leader
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 node list
 ```
 
 ### 2. 单独测试主臂卸力和位置回读
 
 ```bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 python3 src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
   --device /dev/so101_leader \
   --mode enter \
@@ -283,10 +283,10 @@ python3 src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
 构建后启动：
 
 ```bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --packages-select so101_hx35hm_bridge so101_bringup
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup teleop_hx35hm.launch.py \
   leader_rviz:=false \
@@ -524,13 +524,13 @@ PC USB
 当前已新增测试脚本：
 
 ```bash
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/hx35hm_raw_bus_leader.py
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/hx35hm_raw_bus_leader.py
 ```
 
 示例：对主臂 1-6 号发送真正 raw unload：
 
 ```bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 python3 src/so101_hx35hm_bridge/scripts/hx35hm_raw_bus_leader.py \
   --device /dev/ttyUSB0 \
   --baudrate 115200 \
@@ -798,6 +798,6 @@ relay 和 follower 侧已经能把命令变平滑。
 
 ### 6. 当前配套文档
 
-- [HX35HM_SO101_主从控制当前使用流程.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从控制当前使用流程.md)
-- [HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md)
-- [HX35HM_SO101_主臂手拖示教当前结论与替代方案.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主臂手拖示教当前结论与替代方案.md)
+- [HX35HM_SO101_主从控制当前使用流程.md](../docs/HX35HM_SO101_主从控制当前使用流程.md)
+- [HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md](../docs/HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md)
+- [HX35HM_SO101_主臂手拖示教当前结论与替代方案.md](../docs/HX35HM_SO101_主臂手拖示教当前结论与替代方案.md)

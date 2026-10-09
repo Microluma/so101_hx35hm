@@ -128,9 +128,9 @@
 ### 5.1 启动主栈
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_red_detector:=true \
@@ -139,15 +139,15 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=false \
   use_aruco_detector:=false \
   use_vision_debug_rviz:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 ### 5.2 启动抓取（带调参覆盖）
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
   execute:=true \

@@ -85,9 +85,9 @@ pkill -f 'follower_hx35hm_moveit.launch.py|cartesian_motion_node|hx35hm_bridge|m
 ### 3.2 用 tuner 模式启动主栈
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_red_detector:=true \
@@ -113,11 +113,11 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 如果你不想在主启动命令里开 RViz，也可以单独开：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
-rviz2 -d /home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz
+rviz2 -d ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz
 ```
 
 如果只是想确认红球 debug 图有没有在发，也可以直接查话题：
@@ -407,7 +407,7 @@ depth_to_rgb_yaw:=...
 
 把这些值写回：
 
-- [camera_tf_moveit.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/camera_tf_moveit.launch.py)
+- [camera_tf_moveit.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/camera_tf_moveit.launch.py)
 
 对应默认值：
 

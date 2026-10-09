@@ -42,7 +42,7 @@ HX-35HM 默认 `pos=500` 是舵机角度中位（约 120°），它不是机器�
 
 ### B1. `rest`（折叠）姿态的定义（来自 MoveIt SRDF）
 
-文件：`~/ros2_ws/src/so101-ros-physical-ai/so101_moveit_config/config/so101_arm.srdf`
+文件：`${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_moveit_config/config/so101_arm.srdf`
 
 `rest` 的关节角（rad）：
 
@@ -79,10 +79,10 @@ HX-35HM 默认 `pos=500` 是舵机角度中位（约 120°），它不是机器�
 
 ### C3. 工作空间脚本（你已有）
 
-- 一键全中位：`~/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py`
-- 扫动测试：`~/ros2_ws/tools/hardware_debug/continuous_sweep.py`
-- 回中位（裸）：`~/ros2_ws/tools/hardware_debug/return_to_home.py`
-- 改舵机 ID：`~/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py`
+- 一键全中位：`${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py`
+- 扫动测试：`${ROS2_WS:-$HOME/ros2_ws}/tools/hardware_debug/continuous_sweep.py`
+- 回中位（裸）：`${ROS2_WS:-$HOME/ros2_ws}/tools/hardware_debug/return_to_home.py`
+- 改舵机 ID：`${ROS2_WS:-$HOME/ros2_ws}/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py`
 
 ---
 
@@ -100,11 +100,11 @@ HX-35HM 默认 `pos=500` 是舵机角度中位（约 120°），它不是机器�
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --symlink-install
 source install/setup.bash
 
-python3 ~/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py
 ```
 
 你需要把脚本末尾的 `new_id` 改成目标值（例如先改成 1，再改成 2...）。
@@ -114,7 +114,7 @@ python3 ~/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_rob
 在 `continuous_sweep.py` 里把 `SERVO_IDS` 改成只含当前舵机，例如 `[1]`，然后运行：
 
 ```bash
-python3 ~/ros2_ws/tools/hardware_debug/continuous_sweep.py
+python3 ${ROS2_WS:-$HOME/ros2_ws}/tools/hardware_debug/continuous_sweep.py
 ```
 
 确认：
@@ -138,7 +138,7 @@ python3 ~/ros2_ws/tools/hardware_debug/continuous_sweep.py
 在你把舵机固定到机械结构之前，先做一次全中位，避免某个舵机停在危险角：
 
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py
 ```
 
 说明：
@@ -168,7 +168,7 @@ python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py
 
 三者一致。
 
-> `JOINT_ID_MAP` 在：`~/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py`
+> `JOINT_ID_MAP` 在：`${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py`
 
 ---
 
@@ -321,7 +321,7 @@ roll 关节的“0 rad”通常是“夹爪面朝下/面朝前”的某个定义
 启动单臂 MoveIt（HX-35HM）：
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py use_sim_time:=false
 ```
 
@@ -379,26 +379,26 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py use_sim_time:=false
 
 **1) 一键把机械臂打到 SRDF 的 `rest`（折叠）姿态**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest
 ```
 默认会打印表格并要求你输入 `YES` 才会真正下发；先预览用：
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --dry-run --yes
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --dry-run --yes
 ```
 
 **2) 单舵机定位（你装某个关节时用）**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --servo-id 2 --pos 500
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --servo-id 2 --pos 500
 ```
 
 **3) 列出 SRDF 里可用姿态（rest/zero/extended）**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --list-poses --pose rest
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --list-poses --pose rest
 ```
 
 **4) 可选：装配时顺便处理夹爪**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --gripper neutral
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --gripper neutral
 # 也可以 open/closed（按 config 里的 open_rad/closed_rad）
 ```
 
@@ -416,26 +416,26 @@ python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose 
 
 **1) 一键把机械臂打到 SRDF 的 `rest`（折叠）姿态**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest
 ```
 默认会打印表格并要求你输入 `YES` 才会真正下发；先预览用：
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --dry-run --yes
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --dry-run --yes
 ```
 
 **2) 单舵机定位（你装某个关节时用）**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --servo-id 2 --pos 500
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --servo-id 2 --pos 500
 ```
 
 **3) 列出 SRDF 里可用姿态（rest/zero/extended）**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --list-poses --pose rest
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --list-poses --pose rest
 ```
 
 **4) 可选：装配时顺便处理夹爪**
 ```bash
-python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --gripper neutral
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose rest --gripper neutral
 # 也可以 open/closed（按 config 里的 open_rad/closed_rad）
 ```
 
@@ -444,14 +444,12 @@ python3 ~/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py --pose 
 
 
 
-/home/rog/.openclaw/workspace/clean_so101_arm.sh
-
 ## J. 当前推荐启动命令
 
 ### J1. 纯机械臂 + MoveIt（不启视觉）
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py use_octomap:=false use_rviz:=true use_cameras:=false
@@ -466,7 +464,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py use_octomap:=false us
 - 当前 `cam_overhead` 使用的是人工可调静态外参，便于按真实桌面位置做快速校正
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
@@ -480,7 +478,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 当你已经确认 `/static_camera/points` 稳定后，可以直接开启 MoveIt OctoMap：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
@@ -497,11 +495,11 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 如果只想单独拉起 Astra 视觉，不启动机械臂：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 ### J3. Astra 视觉启动后应检查的话题
@@ -529,7 +527,7 @@ pkill -f gscam_node
 ```
 
 
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 run rqt_image_view rqt_image_view
@@ -542,39 +540,39 @@ ros2 run rqt_image_view rqt_image_view /static_camera/depth/image_raw
 
 
 # ===== 终端1：启动主系统（机械臂+MoveIt+相机）=====
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_octomap:=false \
   use_rviz:=true \
   use_cameras:=true
 # ===== 终端2：清理旧检测节点，只保留一个新版 green_block_detector =====
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 pkill -f green_block_detector || true
 ros2 run so101_hx35hm_bridge green_block_detector
 # ===== 终端3：检查视觉点和QoS =====
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 topic info /vision/green_block/point_base -v
 # 期望：Publisher count=1，Durability=TRANSIENT_LOCAL
 
 ros2 topic echo /vision/green_block/point_base
 # 期望：持续输出 frame_id=base_link 的点
 # ===== 终端4：先做“只规划不执行”验证 =====
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_grasping so101_visual_pick --ros-args \
   -p execute:=false \
   -p point_timeout_s:=60.0
 # ===== 终端4：再做“真实执行抓取” =====
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_grasping so101_visual_pick --ros-args \
   -p execute:=true \
   -p point_timeout_s:=60.0
@@ -599,9 +597,9 @@ pkill -f aruco_detector
 ### K2. 启动主系统（相机+MoveIt）
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_octomap:=false \
   use_rviz:=true \
@@ -611,9 +609,9 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 ### K3. 若 `/vision/aruco/*` 无输出，手动起检测节点（推荐排障用）
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_hx35hm_bridge aruco_detector --ros-args \
   -p marker_id:=-1 \
   -p auto_dictionary:=true \
@@ -641,9 +639,9 @@ ros2 topic list | grep /vision/aruco
 默认流程是：读取 ArUco 的 `base_link` 位姿 -> 抬到预抓取位 -> 下到抓取位 -> 闭夹爪 -> 退回。
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_grasping so101_visual_grasp --ros-args \
   -p pose_topic:=/vision/aruco/pose_base \
   -p execute:=false
@@ -659,9 +657,9 @@ ros2 run so101_grasping so101_visual_grasp --ros-args \
 如果目标不是 ArUco，而是红色圆形物块，可以直接启动红色检测节点，再把检测输出喂给视觉抓取节点：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_octomap:=false \
   use_rviz:=true \
@@ -707,7 +705,7 @@ pkill -f hx35hm_bridge || true
 pkill -f red_circle_detector || true
 sleep 2
 
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
@@ -720,7 +718,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 
 **终端2：先确认红球位姿正常**
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 topic echo /vision/red_block/pose_base --once
@@ -733,7 +731,7 @@ ros2 topic echo /vision/red_block/pose_base --once
 
 **终端2：先做一次只规划不执行**
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
@@ -743,7 +741,7 @@ ros2 launch so101_grasping so101_visual_grasp.launch.py \
 
 **终端2：确认没问题后做真实抓取**
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
@@ -767,4 +765,4 @@ ros2 launch so101_grasping so101_visual_grasp.launch.py \
 - 默认末端朝向已修正
 - 抓取优先按位置目标规划，不再优先走“近似不动解”
 
-如果你愿意，我下一步可以把这整套直接补写进 [HX35HM_SO101_超详细装配流程.md](/home/rog/ros2_ws/docs/HX35HM_SO101_超详细装配流程.md)。
+如果你愿意，我下一步可以把这整套直接补写进 [HX35HM_SO101_超详细装配流程.md](../docs/HX35HM_SO101_超详细装配流程.md)。

@@ -64,25 +64,25 @@ https://github.com/user-attachments/assets/6b907dc1-2aa6-41a9-9c77-5fd130d048e7
 
 顶层关键内容：
 
-- [`src/`](/home/rog/ros2_ws/src)
+- [`src/`](src/)
   ROS 2 源码与各功能包
-- [`docs/`](/home/rog/ros2_ws/docs)
+- [`docs/`](docs/)
   中文工程文档与调试记录
-- [`calibration/handeye/`](/home/rog/ros2_ws/calibration/handeye)
+- [`calibration/handeye/`](calibration/handeye/)
   手眼标定结果与原始样本
-- [`tools/hardware_debug/`](/home/rog/ros2_ws/tools/hardware_debug)
+- [`tools/hardware_debug/`](tools/hardware_debug/)
   裸硬件调试脚本
-- [`src/so101-ros-physical-ai/`](/home/rog/ros2_ws/src/so101-ros-physical-ai)
+- [`src/so101-ros-physical-ai/`](src/so101-ros-physical-ai/)
   主体 ROS 2 工程，包含 bringup、MoveIt、运动学、抓取、相机、工具
-- [`src/so101_hx35hm_bridge/`](/home/rog/ros2_ws/src/so101_hx35hm_bridge)
+- [`src/so101_hx35hm_bridge/`](src/so101_hx35hm_bridge/)
   HX-35HM 桥接、红球检测、ArUco 检测、桌面估计
-- [`calibration/handeye/aruco_handeye_result.json`](/home/rog/ros2_ws/calibration/handeye/aruco_handeye_result.json)
+- [`calibration/handeye/aruco_handeye_result.json`](calibration/handeye/aruco_handeye_result.json)
   当前一套手眼标定结果
-- [`calibration/handeye/aruco_handeye_result_v2.json`](/home/rog/ros2_ws/calibration/handeye/aruco_handeye_result_v2.json)
+- [`calibration/handeye/aruco_handeye_result_v2.json`](calibration/handeye/aruco_handeye_result_v2.json)
   另一套手眼标定结果
-- [`tools/hardware_debug/continuous_sweep.py`](/home/rog/ros2_ws/tools/hardware_debug/continuous_sweep.py)
+- [`tools/hardware_debug/continuous_sweep.py`](tools/hardware_debug/continuous_sweep.py)
   舵机/机械臂扫动辅助脚本
-- [`tools/hardware_debug/return_to_home.py`](/home/rog/ros2_ws/tools/hardware_debug/return_to_home.py)
+- [`tools/hardware_debug/return_to_home.py`](tools/hardware_debug/return_to_home.py)
   简单回位脚本
 
 归档目录：
@@ -92,26 +92,27 @@ https://github.com/user-attachments/assets/6b907dc1-2aa6-41a9-9c77-5fd130d048e7
 
 主要 ROS 包：
 
-- [`so101_bringup`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup)
-- [`so101_moveit_config`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_moveit_config)
-- [`so101_grasping`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping)
-- [`so101_kinematics`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_kinematics)
-- [`so101_hx35hm_bridge`](/home/rog/ros2_ws/src/so101_hx35hm_bridge)
-- [`so101_openni2_camera`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_openni2_camera)
+- [`so101_bringup`](src/so101-ros-physical-ai/so101_bringup/)
+- [`so101_moveit_config`](src/so101-ros-physical-ai/so101_moveit_config/)
+- [`so101_grasping`](src/so101-ros-physical-ai/so101_grasping/)
+- [`so101_kinematics`](src/so101-ros-physical-ai/so101_kinematics/)
+- [`so101_hx35hm_bridge`](src/so101_hx35hm_bridge/)
+- [`so101_openni2_camera`](src/so101-ros-physical-ai/so101_openni2_camera/)
 
 ## 构建
 
-建议统一使用系统 Python，并清理旧缓存影响：
+建议统一使用系统 Python，并清理旧缓存影响。以下命令默认工作区位于 `~/ros2_ws`；如果你将仓库克隆到其他位置，请先将 `ROS2_WS` 设为该仓库的绝对路径。
 
 ```bash
-cd ~/ros2_ws
+export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
+cd "$ROS2_WS"
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build \
   --symlink-install \
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-source ~/ros2_ws/install/setup.bash
+source "$ROS2_WS/install/setup.bash"
 ```
 
 如果你只改了抓取相关：
@@ -123,7 +124,7 @@ colcon build --packages-select so101_grasping so101_bringup so101_kinematics so1
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
 ```
 
-如果构建日志里出现旧 Python 路径，例如 `/home/rog/.local/bin/python3.11`，通常是旧 CMake 缓存，不一定是源码本身的问题。
+如果构建日志里出现旧 Python 路径，例如 `~/.local/bin/python3.11`，通常是旧 CMake 缓存，不一定是源码本身的问题。
 
 ## 快速开始
 
@@ -132,9 +133,10 @@ colcon build --packages-select so101_grasping so101_bringup so101_kinematics so1
 这是当前较稳定的真机总入口：
 
 ```bash
-cd ~/ros2_ws
+export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
+cd "$ROS2_WS"
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source "$ROS2_WS/install/setup.bash"
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_red_detector:=true \
@@ -143,7 +145,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=false \
   use_aruco_detector:=false \
   use_vision_debug_rviz:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:="$ROS2_WS/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml"
 ```
 
 这会拉起：
@@ -160,9 +162,10 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 另开终端：
 
 ```bash
-cd ~/ros2_ws
+export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
+cd "$ROS2_WS"
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source "$ROS2_WS/install/setup.bash"
 
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
   execute:=true \
@@ -212,45 +215,45 @@ ros2 topic list | rg '/vision|/static_camera|/joint_states'
 如果你第一次接这套系统，建议按下面顺序看文档：
 
 - 抓取流程：
-  [`HX35HM_SO101_红球抓取完整执行步骤.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_红球抓取完整执行步骤.md)
+  [`HX35HM_SO101_红球抓取完整执行步骤.md`](docs/HX35HM_SO101_红球抓取完整执行步骤.md)
 - MoveIt 启动与规划控制：
-  [`HX35HM_SO101_MoveIt规划控制启动流程.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_MoveIt规划控制启动流程.md)
+  [`HX35HM_SO101_MoveIt规划控制启动流程.md`](docs/HX35HM_SO101_MoveIt规划控制启动流程.md)
 - 相机内参标定：
-  [`HX35HM_SO101_相机内参标定完整步骤.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_相机内参标定完整步骤.md)
+  [`HX35HM_SO101_相机内参标定完整步骤.md`](docs/HX35HM_SO101_相机内参标定完整步骤.md)
 - 装配姿态与归零建议：
-  [`HX35HM_SO101_装配姿态与归零建议.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_装配姿态与归零建议.md)
+  [`HX35HM_SO101_装配姿态与归零建议.md`](docs/HX35HM_SO101_装配姿态与归零建议.md)
 
 中文工程文档导航：
 
 - 抓取调试日志：
-  [`HX35HM_SO101_红球抓取调试日志.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_红球抓取调试日志.md)
+  [`HX35HM_SO101_红球抓取调试日志.md`](docs/HX35HM_SO101_红球抓取调试日志.md)
 - 机械臂控制链详解：
-  [`HX35HM_SO101_机械臂控制链详解.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_机械臂控制链详解.md)
+  [`HX35HM_SO101_机械臂控制链详解.md`](docs/HX35HM_SO101_机械臂控制链详解.md)
 - 控制链接口速查表：
-  [`HX35HM_SO101_控制链接口速查表.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_控制链接口速查表.md)
+  [`HX35HM_SO101_控制链接口速查表.md`](docs/HX35HM_SO101_控制链接口速查表.md)
 - 手动调参指南：
-  [`HX35HM_SO101_手动调参指南.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_手动调参指南.md)
+  [`HX35HM_SO101_手动调参指南.md`](docs/HX35HM_SO101_手动调参指南.md)
 - 环境清理与进程管理：
-  [`HX35HM_SO101_环境清理与进程管理.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_环境清理与进程管理.md)
+  [`HX35HM_SO101_环境清理与进程管理.md`](docs/HX35HM_SO101_环境清理与进程管理.md)
 - 摄像头调位与可视化执行步骤：
-  [`HX35HM_SO101_摄像头调位与可视化执行步骤.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_摄像头调位与可视化执行步骤.md)
+  [`HX35HM_SO101_摄像头调位与可视化执行步骤.md`](docs/HX35HM_SO101_摄像头调位与可视化执行步骤.md)
 - 超详细装配流程：
-  [`HX35HM_SO101_超详细装配流程.md`](/home/rog/ros2_ws/docs/HX35HM_SO101_超详细装配流程.md)
+  [`HX35HM_SO101_超详细装配流程.md`](docs/HX35HM_SO101_超详细装配流程.md)
 
 手眼标定相关工具在：
 
-- [`tools/handeye/collect_aruco_handeye_samples.py`](/home/rog/ros2_ws/src/so101-ros-physical-ai/tools/handeye/collect_aruco_handeye_samples.py)
-- [`tools/handeye/auto_motion_aruco_sampler.py`](/home/rog/ros2_ws/src/so101-ros-physical-ai/tools/handeye/auto_motion_aruco_sampler.py)
-- [`tools/handeye/solve_aruco_handeye.py`](/home/rog/ros2_ws/src/so101-ros-physical-ai/tools/handeye/solve_aruco_handeye.py)
+- [`tools/handeye/collect_aruco_handeye_samples.py`](src/so101-ros-physical-ai/tools/handeye/collect_aruco_handeye_samples.py)
+- [`tools/handeye/auto_motion_aruco_sampler.py`](src/so101-ros-physical-ai/tools/handeye/auto_motion_aruco_sampler.py)
+- [`tools/handeye/solve_aruco_handeye.py`](src/so101-ros-physical-ai/tools/handeye/solve_aruco_handeye.py)
 
 相机内参标定工具在：
 
-- [`tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py`](/home/rog/ros2_ws/src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py)
+- [`tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py`](src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py)
 
 ## 当前仓库的一些工程约定
 
 - `build/`、`install/`、`log/` 已忽略，不进仓库
-- 相机标定文件优先使用 `package://` 路径，不再依赖本机固定 `file:///home/...`
+- 相机标定文件优先使用 `package://` 路径，不再依赖本机固定的 `file://` 绝对路径
 - hand-eye 工具默认输出已改成相对路径，更适合迁移到其他机器
 - `src/so101-ros-physical-ai` 现在已经作为普通源码目录纳入仓库，不再依赖外部子仓库指针
 - 中文工程文档已经统一整理到 `docs/`，避免和 ROS 包源码混放
@@ -288,12 +291,12 @@ ros2 topic list | rg '/vision|/static_camera|/joint_states'
 如果你只是想找某个功能入口，最常用的路径通常是：
 
 - 真机总入口：
-  [`follower_hx35hm_moveit.launch.py`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
+  [`follower_hx35hm_moveit.launch.py`](src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
 - 红球抓取：
-  [`so101_visual_grasp.cpp`](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping/src/so101_visual_grasp.cpp)
+  [`so101_visual_grasp.cpp`](src/so101-ros-physical-ai/so101_grasping/src/so101_visual_grasp.cpp)
 - HX35HM 桥接：
-  [`bridge_node.py`](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
+  [`bridge_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
 - 红球检测：
-  [`red_circle_detector_node.py`](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/red_circle_detector_node.py)
+  [`red_circle_detector_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/red_circle_detector_node.py)
 - 桌面估计：
-  [`table_plane_estimator_node.py`](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/table_plane_estimator_node.py)
+  [`table_plane_estimator_node.py`](src/so101_hx35hm_bridge/so101_hx35hm_bridge/table_plane_estimator_node.py)

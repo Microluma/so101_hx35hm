@@ -46,7 +46,7 @@
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup teleop_hx35hm.launch.py \
   leader_rviz:=false \
@@ -189,7 +189,7 @@ topic，不会额外刷新 FJT goal。
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup teleop_hx35hm.launch.py \
   leader_rviz:=false \
@@ -201,10 +201,10 @@ ros2 launch so101_bringup teleop_hx35hm.launch.py \
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_dual_rgb.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_hx35hm_dual_rgb.yaml
 ```
 
 该配置会发布：
@@ -218,7 +218,7 @@ ros2 launch so101_bringup cameras.launch.py \
 
 ```bash
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml
 ```
 
 但当前 `episode_recorder_hx35hm_so101.yaml` 已要求腕部相机 topic，正式示教录制请使用双相机配置。
@@ -227,20 +227,20 @@ ros2 launch so101_bringup cameras.launch.py \
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch episode_recorder recorder.launch.py \
-  params_file:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/recording/episode_recorder_hx35hm_so101.yaml \
+  params_file:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/recording/episode_recorder_hx35hm_so101.yaml \
   experiment_name:=pick_red_block \
   task:="Pick up the red block and place it in the target area." \
-  root_dir:=/home/rog/ros2_ws/datasets/so101_episodes
+  root_dir:=${ROS2_WS:-$HOME/ros2_ws}/datasets/so101_episodes
 ```
 
 终端 4：启动录制键盘控制。
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 run episode_recorder teleop_episode_keyboard
 ```
@@ -314,15 +314,15 @@ ros2 topic echo /follower/camera_info --once
 进入上游项目根目录：
 
 ```bash
-cd /home/rog/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 ```
 
 本地转换：
 
 ```bash
 pixi run -e lerobot convert -- \
-  --input-dir  /home/rog/ros2_ws/datasets/so101_episodes/pick_red_block \
-  --config     /home/rog/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/hx35hm_so101.yaml \
+  --input-dir  ${ROS2_WS:-$HOME/ros2_ws}/datasets/so101_episodes/pick_red_block \
+  --config     ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/hx35hm_so101.yaml \
   --repo-id    local/hx35hm_so101_pick_red_block \
   --overwrite
 ```
@@ -363,7 +363,7 @@ reference_topic: "/follower/image_raw"
 转换后可视化：
 
 ```bash
-cd /home/rog/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 pixi shell -e lerobot
 lerobot-dataset-viz --repo-id local/hx35hm_so101_pick_red_block --episode-index 0
 ```
@@ -387,7 +387,7 @@ lerobot-dataset-viz --repo-id local/hx35hm_so101_pick_red_block --episode-index 
 先用 ACT，不要一开始上大型 VLA。
 
 ```bash
-cd /home/rog/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 pixi shell -e lerobot
 
 lerobot-train \
@@ -447,7 +447,7 @@ CPU 只适合验证流程，不适合认真训练。
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup inference.launch.py
 ```
@@ -455,7 +455,7 @@ ros2 launch so101_bringup inference.launch.py
 终端 2：运行策略。
 
 ```bash
-cd /home/rog/ros2_ws/src/so101-ros-physical-ai
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai
 
 pixi run -e lerobot infer -- --ros-args \
   -p repo_id:="local/hx35hm_so101_pick_red_block" \
@@ -490,14 +490,14 @@ docs/HX35HM_SO101_主从控制紧急停止命令.md
 建议把数据和模型放在工作区外或专门目录下：
 
 ```text
-/home/rog/ros2_ws/datasets/
+${ROS2_WS:-$HOME/ros2_ws}/datasets/
   so101_episodes/
     pick_red_block/
       episode_xxx/
   lerobot/
     hx35hm_so101_pick_red_block/
 
-/home/rog/ros2_ws/models/
+${ROS2_WS:-$HOME/ros2_ws}/models/
   act_hx35hm_so101_pick_red_block/
 ```
 
@@ -516,7 +516,7 @@ docs/HX35HM_SO101_主从控制紧急停止命令.md
 验收：
 
 ```bash
-ls /home/rog/ros2_ws/datasets/so101_episodes/pick_red_block
+ls ${ROS2_WS:-$HOME/ros2_ws}/datasets/so101_episodes/pick_red_block
 ```
 
 ### M2：数据转换跑通

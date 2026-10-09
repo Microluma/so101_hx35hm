@@ -36,46 +36,46 @@
 在新终端执行：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build --packages-select so101_grasping so101_bringup so101_kinematics so101_hx35hm_bridge \
   --symlink-install \
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 如果你只改了抓取节点：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build --packages-select so101_grasping \
   --symlink-install \
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 如果你改了 `/go_to_pose`、Cartesian 轨迹或夹爪覆盖逻辑：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build --packages-select so101_kinematics so101_hx35hm_bridge \
   --symlink-install \
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 如果你碰到：
 
 - `ModuleNotFoundError: No module named 'catkin_pkg'`
-- 日志里还出现 `/home/rog/.local/bin/python3.11`
+- 日志里还出现 `~/.local/bin/python3.11`
 
 那通常是 `build/` 缓存里还记着旧 Python，不是当前抓取代码本身有错。这里统一使用 `/usr/bin/python3`，就是为了把这个隐患一次性压住。
 
@@ -86,9 +86,9 @@ source ~/ros2_ws/install/setup.bash
 建议先不开 RViz，也不开 joint GUI，减少干扰：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_red_detector:=true \
@@ -97,7 +97,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=false \
   use_aruco_detector:=false \
   use_vision_debug_rviz:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 正常情况下你会看到这些关键信息：
@@ -123,9 +123,9 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 另开一个终端：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 ### 4.1 检查节点
@@ -263,9 +263,9 @@ ros2 topic echo /vision/table/status
 这是当前验证过的一条更稳的真抓命令：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
   execute:=true \
@@ -533,7 +533,7 @@ pgrep -af 'follower_hx35hm_moveit|so101_visual_grasp|move_group|cartesian_motion
 这条命令只清理当前这套 SO101 抓取系统相关进程，不会删除文件：
 
 ```bash
-pkill -f 'follower_hx35hm_moveit.launch.py|so101_visual_grasp|move_group|cartesian_motion_node|red_circle_detector|gscam_node|openni2_camera_node|rviz2|/home/rog/ros2_ws/install/so101_hx35hm_bridge/lib/so101_hx35hm_bridge/hx35hm_bridge' || true
+pkill -f 'follower_hx35hm_moveit.launch.py|so101_visual_grasp|move_group|cartesian_motion_node|red_circle_detector|gscam_node|openni2_camera_node|rviz2|hx35hm_bridge' || true
 ```
 
 如果你还开着对应 launch 终端，最好也在那些终端里按一次：
@@ -547,9 +547,9 @@ Ctrl+C
 有时候进程已经停了，但 `ros2 node list` 还显示旧节点，这是 ROS daemon 的图缓存没刷新。执行：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 daemon stop
 ros2 daemon start
@@ -586,10 +586,10 @@ ros2 action info /follower/arm_trajectory_controller/follow_joint_trajectory
 
 ### 10.6 如果 Python/colcon 缓存干扰构建
 
-如果日志里反复出现旧 Python，例如 `/home/rog/.local/bin/python3.11`，或者出现 `catkin_pkg` 相关错误，可以清理相关包的构建缓存后重编：
+如果日志里反复出现旧 Python，例如 `~/.local/bin/python3.11`，或者出现 `catkin_pkg` 相关错误，可以清理相关包的构建缓存后重编：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 
@@ -602,7 +602,7 @@ colcon build --packages-select so101_grasping so101_kinematics so101_hx35hm_brid
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
 
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 注意：
@@ -636,9 +636,9 @@ source ~/ros2_ws/install/setup.bash
 终端 1：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_red_detector:=true \
@@ -647,15 +647,15 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=false \
   use_aruco_detector:=false \
   use_vision_debug_rviz:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 终端 2：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_grasping so101_visual_grasp.launch.py \
   execute:=true \
@@ -692,7 +692,7 @@ Ctrl+C
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 daemon stop
 ros2 daemon start
 ```

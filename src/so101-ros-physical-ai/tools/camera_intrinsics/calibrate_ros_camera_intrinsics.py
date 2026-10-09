@@ -255,7 +255,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-samples", type=int, default=18)
     parser.add_argument(
         "--output",
-        default="~/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml",
+        default=str(
+            Path(__file__).resolve().parents[2]
+            / "so101_bringup"
+            / "config"
+            / "cameras"
+            / "cam_overhead_calib.yaml"
+        ),
     )
     return parser.parse_args()
 

@@ -30,7 +30,7 @@ CMD 32 = LOAD_OR_UNLOAD_READ
 文件：
 
 ```text
-/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py
+${ROS2_WS:-$HOME/ros2_ws}/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py
 ```
 
 新增接口：
@@ -53,7 +53,7 @@ board.bus_servo_load(servo_id)
 文件：
 
 ```text
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py
 ```
 
 新增参数：
@@ -77,8 +77,8 @@ custom-raw    走新固件 RAW_WRITE 0xF0，直接发送 55 55 原生舵机帧�
 文件：
 
 ```text
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/firmware_reference/ros_robot_controller_bus_servo_raw_extension.h
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/firmware_reference/ros_robot_controller_bus_servo_raw_extension.c
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/firmware_reference/ros_robot_controller_bus_servo_raw_extension.h
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/firmware_reference/ros_robot_controller_bus_servo_raw_extension.c
 ```
 
 这两个文件是给官方 STM32 工程移植用的参考实现。当前本机没有官方 STM32 固件工程，所以不能直接编译烧录。
@@ -224,14 +224,14 @@ pkill -f 'teleop_hx35hm.launch.py|follower_command_relay|hx35hm_bridge|leader_hx
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 node list
 ```
 
 使用新固件专用卸力命令：
 
 ```bash
-python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
   --device /dev/so101_leader \
   --mode enter \
   --method custom-unload \
@@ -242,7 +242,7 @@ python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
 如果主臂仍然很紧，再测试 RAW 透传路径：
 
 ```bash
-python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
   --device /dev/so101_leader \
   --mode enter \
   --method custom-raw \
@@ -253,7 +253,7 @@ python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
 验证卸力后位置回读：
 
 ```bash
-python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
   --device /dev/so101_leader \
   --mode verify-readback \
   --ids 1 2 3 4 5 6 \
@@ -263,7 +263,7 @@ python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
 恢复上力：
 
 ```bash
-python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
   --device /dev/so101_leader \
   --mode exit \
   --method custom-unload \
@@ -294,7 +294,7 @@ python3 /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/leader_drag_mode.py \
 需要拿到官方 STM32 固件工程后，把本仓库的参考模块移植进去并编译烧录：
 
 ```text
-/home/rog/ros2_ws/src/so101_hx35hm_bridge/firmware_reference/
+${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/firmware_reference/
 ```
 
 在没有固件工程本体前，本仓库已经完成 ROS2/PC 侧调用入口和 STM32 侧参考实现，但不能替代实际烧录。

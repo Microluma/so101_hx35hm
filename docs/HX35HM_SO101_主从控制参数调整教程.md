@@ -25,7 +25,7 @@ pkill -f 'teleop_hx35hm.launch.py|follower_command_relay|hx35hm_bridge|robot_sta
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 启动主从控制：
@@ -266,7 +266,7 @@ colcon build --packages-select so101_teleop so101_bringup --symlink-install
 重新加载环境：
 
 ```bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 确认安装后的参数已经同步：
@@ -324,7 +324,7 @@ trajectory_goal_points: 1
 ```bash
 source /opt/ros/jazzy/setup.bash
 colcon build --packages-select so101_teleop so101_bringup --symlink-install
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 ## 8. 调参记录模板

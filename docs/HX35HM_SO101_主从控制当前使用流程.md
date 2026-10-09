@@ -102,7 +102,7 @@ ps -ef | rg 'teleop_hx35hm|leader_hx35hm|follower_hx35hm_moveit|hx35hm_bridge|fo
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 daemon stop
 ros2 daemon start
 ros2 node list
@@ -120,7 +120,7 @@ ls -l /dev/so101_leader /dev/so101_follower
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup teleop_hx35hm.launch.py \
   leader_rviz:=false \
@@ -246,7 +246,7 @@ position_readback_rate_hz 降到 3Hz 是为了进一步减少读写抢总线。
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 node list
 ```
 
@@ -316,8 +316,8 @@ Dry-run：
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
-cd /home/rog/ros2_ws
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
+cd ${ROS2_WS:-$HOME/ros2_ws}
 
 python3 src/so101_hx35hm_bridge/scripts/auto_trim_teleop_offset.py \
   --joint shoulder_pan \
@@ -342,7 +342,7 @@ python3 src/so101_hx35hm_bridge/scripts/auto_trim_teleop_offset.py \
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --packages-select so101_teleop --symlink-install
 ```
 
@@ -360,8 +360,8 @@ src/so101_hx35hm_bridge/scripts/diagnose_teleop_smoothness.py
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
-cd /home/rog/ros2_ws
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
+cd ${ROS2_WS:-$HOME/ros2_ws}
 
 python3 src/so101_hx35hm_bridge/scripts/diagnose_teleop_smoothness.py \
   --duration 15 \
@@ -476,7 +476,7 @@ position_readback_rate_hz: 240.0
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --packages-select so101_teleop --symlink-install
 ```
 
@@ -484,7 +484,7 @@ colcon build --packages-select so101_teleop --symlink-install
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --packages-select so101_hx35hm_bridge so101_bringup --symlink-install
 ```
 
@@ -492,7 +492,7 @@ colcon build --packages-select so101_hx35hm_bridge so101_bringup --symlink-insta
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /home/rog/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 colcon build --packages-select so101_teleop so101_hx35hm_bridge so101_bringup --symlink-install
 ```
 
@@ -514,7 +514,7 @@ ps -ef | rg 'teleop_hx35hm|leader_hx35hm|follower_hx35hm_moveit|hx35hm_bridge|fo
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 daemon stop
 ros2 daemon start
 ros2 node list

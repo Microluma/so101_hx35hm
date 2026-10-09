@@ -50,7 +50,7 @@
 
 对应启动文件：
 
-- [so101_visual_grasp.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_grasping/launch/so101_visual_grasp.launch.py)
+- [so101_visual_grasp.launch.py](../src/so101-ros-physical-ai/so101_grasping/launch/so101_visual_grasp.launch.py)
 
 它负责做的事情不是“直接控制舵机”，而是：
 
@@ -97,7 +97,7 @@
 
 它们由主 bringup 启动：
 
-- [follower_hx35hm_moveit.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
+- [follower_hx35hm_moveit.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
 
 ### 4.1 红球检测节点
 
@@ -152,8 +152,8 @@ MoveIt 负责：
 
 相关配置文件：
 
-- [moveit_controllers.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_moveit_config/config/moveit_controllers.yaml)
-- [joint_limits.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_moveit_config/config/joint_limits.yaml)
+- [moveit_controllers.yaml](../src/so101-ros-physical-ai/so101_moveit_config/config/moveit_controllers.yaml)
+- [joint_limits.yaml](../src/so101-ros-physical-ai/so101_moveit_config/config/joint_limits.yaml)
 
 MoveIt 最终不是直接控制舵机，而是通过：
 
@@ -280,7 +280,7 @@ action 类型：
 
 核心文件：
 
-- [bridge_node.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
+- [bridge_node.py](../src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
 
 它做的事情非常多，主要包括：
 
@@ -385,7 +385,7 @@ action 类型：
 
 最底层的核心文件是：
 
-- [ros_robot_controller_sdk.py](/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py)
+- [ros_robot_controller_sdk.py](../src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/ros_robot_controller_sdk.py)
 
 这个文件本质上是 STM32 控制板的 Python SDK。
 
@@ -439,7 +439,7 @@ action 类型：
 
 主启动文件：
 
-- [follower_hx35hm_moveit.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
+- [follower_hx35hm_moveit.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
 
 它会拉起：
 

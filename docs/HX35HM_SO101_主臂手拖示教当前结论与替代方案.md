@@ -284,10 +284,10 @@
 
 当前可参考文件：
 
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/leader.launch.py`
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/teleop.launch.py`
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml`
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/lerobot_leader_arm.json`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/launch/leader.launch.py`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/launch/teleop.launch.py`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/hardware/lerobot_leader_arm.json`
 
 目标是让 leader 侧走：
 
@@ -295,7 +295,7 @@
 ros2 launch so101_bringup leader.launch.py \
   namespace:=leader \
   usb_port:=/dev/so101_leader \
-  joint_config_file:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml \
+  joint_config_file:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml \
   use_rviz:=false
 ```
 
@@ -392,8 +392,8 @@ so101_teleop -> /follower/forward_controller/commands -> follower hx35hm_bridge
 
 当前已经新增软件 leader：
 
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/scripts/software_leader.py`
-- `/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/software_leader_teleop_hx35hm.launch.py`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/scripts/software_leader.py`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/launch/software_leader_teleop_hx35hm.launch.py`
 
 已经验证：
 
@@ -506,11 +506,11 @@ ros2 node list
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup leader.launch.py \
   namespace:=leader \
   usb_port:=/dev/so101_leader \
-  joint_config_file:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml \
+  joint_config_file:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml \
   use_rviz:=false
 ```
 
@@ -518,7 +518,7 @@ ros2 launch so101_bringup leader.launch.py \
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 topic hz /leader/joint_states
 ros2 topic echo /leader/joint_states --once
 ```
@@ -529,7 +529,7 @@ ros2 topic echo /leader/joint_states --once
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_bringup software_leader.py --ros-args -r __ns:=/leader
 ```
 
@@ -537,7 +537,7 @@ ros2 run so101_bringup software_leader.py --ros-args -r __ns:=/leader
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 run so101_bringup software_leader.py --no-gui --ros-args -r __ns:=/leader
 ```
 
@@ -565,7 +565,7 @@ ros2 topic info /follower/forward_controller/commands -v
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_teleop teleop.launch.py \
   leader_namespace:=leader \
   follower_namespace:=follower \
@@ -586,7 +586,7 @@ ros2 topic hz /follower/forward_controller/commands
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup software_leader_teleop_hx35hm.launch.py
 ```
 
@@ -594,7 +594,7 @@ ros2 launch so101_bringup software_leader_teleop_hx35hm.launch.py
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /home/rog/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 launch so101_bringup software_leader_teleop_hx35hm.launch.py use_gui:=false headless:=true
 ```
 
@@ -633,9 +633,9 @@ ros2 launch so101_bringup software_leader_teleop_hx35hm.launch.py use_gui:=false
 
 ## 相关文档
 
-- [HX35HM_SO101_主从控制紧急停止命令.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从控制紧急停止命令.md)
-- [HX35HM_SO101_STM32串口绑定_舵机编号_回中完整手册.md](/home/rog/ros2_ws/docs/HX35HM_SO101_STM32串口绑定_舵机编号_回中完整手册.md)
-- [HX35HM_SO101_机械臂控制链详解.md](/home/rog/ros2_ws/docs/HX35HM_SO101_机械臂控制链详解.md)
+- [HX35HM_SO101_主从控制紧急停止命令.md](../docs/HX35HM_SO101_主从控制紧急停止命令.md)
+- [HX35HM_SO101_STM32串口绑定_舵机编号_回中完整手册.md](../docs/HX35HM_SO101_STM32串口绑定_舵机编号_回中完整手册.md)
+- [HX35HM_SO101_机械臂控制链详解.md](../docs/HX35HM_SO101_机械臂控制链详解.md)
 
 ---
 
@@ -809,6 +809,6 @@ P3: 长期优化 leader 采样架构
 
 ### 当前配套文档
 
-- [HX35HM_SO101_主从控制当前使用流程.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从控制当前使用流程.md)
-- [HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md)
-- [HX35HM_SO101_主从控制紧急停止命令.md](/home/rog/ros2_ws/docs/HX35HM_SO101_主从控制紧急停止命令.md)
+- [HX35HM_SO101_主从控制当前使用流程.md](../docs/HX35HM_SO101_主从控制当前使用流程.md)
+- [HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md](../docs/HX35HM_SO101_主从跟随顿挫与三号关节优化方案.md)
+- [HX35HM_SO101_主从控制紧急停止命令.md](../docs/HX35HM_SO101_主从控制紧急停止命令.md)

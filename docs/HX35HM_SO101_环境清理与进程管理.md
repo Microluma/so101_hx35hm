@@ -33,7 +33,7 @@ pkill -f 'follower_hx35hm_moveit.launch.py|so101_visual_grasp|move_group|cartesi
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ros2 daemon stop
 ros2 daemon start
 ```
@@ -73,7 +73,7 @@ lsof /dev/video0 /dev/video1 /dev/video2 /dev/video3 2>/dev/null
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 ### 4.1 看关键进程是否重复
@@ -107,9 +107,9 @@ ros2 service list | rg '/go_to_pose|/go_to_joints'
 ## 5. 一键“测试前清场 + 重启主栈”
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 pkill -f 'follower_hx35hm_moveit.launch.py|so101_visual_grasp|move_group|cartesian_motion_node|red_circle_detector|table_plane_estimator|gscam_node|openni2_camera_node|hx35hm_bridge' || true
 ros2 daemon stop >/dev/null 2>&1 || true
@@ -122,7 +122,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=false \
   use_aruco_detector:=false \
   use_vision_debug_rviz:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 ---

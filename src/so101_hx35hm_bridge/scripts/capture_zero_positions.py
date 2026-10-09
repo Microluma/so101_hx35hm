@@ -6,9 +6,10 @@ Capture current HX-35HM servo positions and back-compute suggested joint_zero_po
 for the bridge config, assuming the arm is currently placed in a known SRDF pose.
 
 Typical usage:
+  export ROS2_WS="${ROS2_WS:-$HOME/ros2_ws}"
   python3 capture_zero_positions.py \
     --device /dev/so101_leader \
-    --params /home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hx35hm_leader_bridge_params.yaml \
+    --params "$ROS2_WS/src/so101-ros-physical-ai/so101_bringup/config/hx35hm_leader_bridge_params.yaml" \
     --pose rest
 
 The arm must already be physically placed in the requested pose. This tool does

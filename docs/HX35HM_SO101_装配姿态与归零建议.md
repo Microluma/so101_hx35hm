@@ -13,7 +13,7 @@
 
 在 MoveIt 的 SRDF 里，这个工程给机械臂（`manipulator`）定义了多个命名姿态，包括 `zero`、`rest`、`extended`：
 
-- 文件：`~/ros2_ws/src/so101-ros-physical-ai/so101_moveit_config/config/so101_arm.srdf`
+- 文件：`${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_moveit_config/config/so101_arm.srdf`
 
 其中 `rest` 的关节角（单位 rad）是：
 
@@ -82,7 +82,7 @@ SRDF 的注释也明确说这是用来表示类似“folded arms（折叠）”�
 
 bridge 文件：
 
-- `~/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py`
+- `${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py`
 
 已支持（按 `joint_names` 顺序对齐）：
 

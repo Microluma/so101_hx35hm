@@ -40,7 +40,7 @@ No Hugging Face account required. Use `local/` as the repo-id prefix to keep eve
 ```bash
 pixi run -e lerobot convert -- \
   --input-dir  ~/.ros/so101_episodes/pick_and_place \
-  --config     ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+  --config     ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
   --repo-id    local/so101_test
 ```
 
@@ -82,7 +82,7 @@ pixi run -e lerobot -- hf auth whoami
 ```bash
 pixi run -e lerobot convert -- \
   --input-dir  ~/.ros/so101_episodes/pick_and_place_2 \
-  --config     ~/ros2_ws/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
+  --config     ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/rosbag_to_lerobot/config/so101.yaml \
   --repo-id    <hf-username>/so101-pick-and-place \
   --push-hub
 ```

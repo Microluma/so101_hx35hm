@@ -6,15 +6,15 @@
 
 这份流程对应我刚补好的本地标定脚本：
 
-- [calibrate_ros_camera_intrinsics.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py)
+- [calibrate_ros_camera_intrinsics.py](../src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py)
 
 标定完成后，输出会直接写到：
 
-- [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
+- [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
 
 当前 overhead RGB 相机配置已经改成读取这个文件：
 
-- [so101_gs_cam_astra_overhead.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
+- [so101_gs_cam_astra_overhead.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
 
 ---
 
@@ -46,23 +46,23 @@
 
 当前真实内参输出文件：
 
-- [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
+- [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
 
 这意味着你标定完成后，不需要再改 `camera_info_url`，只需要重启相机节点即可生效。
 
 当前推荐的 RGB-only 相机启动配置：
 
-- [so101_cameras_overhead_rgb.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml)
+- [so101_cameras_overhead_rgb.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml)
 
 如果你后面要看更小的 ArUco，可以切到我新补的 `1280x720` 配置：
 
-- [so101_cameras_overhead_rgb_720.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb_720.yaml)
+- [so101_cameras_overhead_rgb_720.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb_720.yaml)
 
 注意：
 
 - 分辨率一旦从 `640x480` 切到 `1280x720`，内参必须重新标定
-- 你现在已经做好的 [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml) 只对应当前 `640x480`
-- 新的 `1280x720` 配置默认先读占位文件 [cam_overhead_calib_placeholder_720.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib_placeholder_720.yaml)，方便先把图像起起来
+- 你现在已经做好的 [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml) 只对应当前 `640x480`
+- 新的 `1280x720` 配置默认先读占位文件 [cam_overhead_calib_placeholder_720.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib_placeholder_720.yaml)，方便先把图像起起来
 
 ---
 
@@ -71,17 +71,17 @@
 先开一个终端：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
 export COLCON_PYTHON_EXECUTABLE=/usr/bin/python3
 colcon build --packages-select so101_bringup \
   --symlink-install \
   --cmake-clean-cache \
   --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
-如果构建阶段出现旧 Python 路径，比如 `/home/rog/.local/bin/python3.11`，或者报 `catkin_pkg` 缺失，优先怀疑的是旧的 CMake 缓存而不是当前代码。上面这套命令已经会强制切到 `/usr/bin/python3` 并清理旧缓存。
+如果构建阶段出现旧 Python 路径，比如 `~/.local/bin/python3.11`，或者报 `catkin_pkg` 缺失，优先怀疑的是旧的 CMake 缓存而不是当前代码。上面这套命令已经会强制切到 `/usr/bin/python3` 并清理旧缓存。
 
 这份文档下面的推荐主流程只需要 `so101_bringup`。
 
@@ -96,12 +96,12 @@ source ~/ros2_ws/install/setup.bash
 ### 4.1 推荐：只启动 overhead RGB
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb.yaml
 ```
 
 这样只会启动：
@@ -113,12 +113,12 @@ ros2 launch so101_bringup cameras.launch.py \
 ### 4.1.1 如果 ArUco 太小，切到 1280x720
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb_720.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_overhead_rgb_720.yaml
 ```
 
 这套配置的思路是：
@@ -137,9 +137,9 @@ ros2 launch so101_bringup cameras.launch.py \
 ### 4.2 备选：沿用你后面视觉抓取那套整机链路
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_cameras:=true \
@@ -160,12 +160,12 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 ### 4.3 备选：如果你想连 depth 一起起
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup cameras.launch.py \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml
 ```
 
 注意：
@@ -177,9 +177,9 @@ ros2 launch so101_bringup cameras.launch.py \
 如果你是为了更小的 ArUco 做联调，也可以切到我新补的 `RGBD + 1280x720 RGB` 版本：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_cameras:=true \
@@ -187,7 +187,7 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_joint_gui:=true \
   use_aruco_detector:=true \
   use_red_detector:=false \
-  cameras_config:=/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_720.yaml
+  cameras_config:=${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd_720.yaml
 ```
 
 注意：
@@ -205,9 +205,9 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 另开一个终端：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 ```
 
 检查：
@@ -228,18 +228,18 @@ ros2 topic echo /static_camera/camera_info --once
 再开一个终端，执行：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
-python3 ~/ros2_ws/src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/tools/camera_intrinsics/calibrate_ros_camera_intrinsics.py \
   --image-topic /static_camera/image_raw \
   --camera-name cam_overhead \
   --cols 9 \
   --rows 6 \
   --square-size-mm 20 \
   --min-samples 18 \
-  --output ~/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml
+  --output ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml
 ```
 
 脚本窗口打开后你会看到实时图像和状态文字。
@@ -320,7 +320,7 @@ C
 - 计算相机矩阵和畸变参数
 - 输出 RMS 和平均重投影误差
 - 保存到：
-  [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
+  [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
 
 如果结果正常，终端里会打印类似：
 
@@ -377,7 +377,7 @@ U
 
 因为当前配置已经指向：
 
-- [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
+- [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
 
 所以重启后新的 `camera_info` 就会被读进去。
 
@@ -388,9 +388,9 @@ U
 重启相机后，再开一个终端检查：
 
 ```bash
-cd ~/ros2_ws
+cd ${ROS2_WS:-$HOME/ros2_ws}
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/install/setup.bash
 
 ros2 topic echo /static_camera/camera_info --once
 ```
@@ -446,7 +446,7 @@ ros2 topic echo /static_camera/camera_info --once
 
 检查：
 
-- [so101_gs_cam_astra_overhead.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
-- [cam_overhead_calib.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
+- [so101_gs_cam_astra_overhead.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
+- [cam_overhead_calib.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/cam_overhead_calib.yaml)
 
 确认 `camera_info_url` 指向的就是新输出文件。

@@ -54,15 +54,15 @@
 
 当前 RGBD 相机组合配置文件：
 
-- [so101_cameras_astra_overhead_rgbd.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
+- [so101_cameras_astra_overhead_rgbd.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_cameras_astra_overhead_rgbd.yaml)
 
 当前 overhead RGB 相机参数文件：
 
-- [so101_gs_cam_astra_overhead.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
+- [so101_gs_cam_astra_overhead.yaml](../src/so101-ros-physical-ai/so101_bringup/config/cameras/so101_gs_cam_astra_overhead.yaml)
 
 现成的 overhead 调试 RViz 配置：
 
-- [vision_overhead_debug.rviz](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz)
+- [vision_overhead_debug.rviz](../src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz)
 
 ---
 
@@ -71,10 +71,10 @@
 先开一个终端，执行：
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
 colcon build --packages-select so101_bringup so101_hx35hm_bridge so101_openni2_camera --symlink-install
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 ```
 
 如果你这次没有改代码，理论上可以不重新编译，但现场执行时还是建议先 `source` 一次工作区。
@@ -94,9 +94,9 @@ source ~/ros2_ws/src/install/setup.bash
 ### 5.1 终端 1：启动机器人 + 相机，不开额外 detector
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
 ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
   use_cameras:=true \
@@ -122,9 +122,9 @@ ros2 launch so101_bringup follower_hx35hm_moveit.launch.py \
 ### 6.1 终端 2：检查话题
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
 ros2 topic list | rg '/static_camera|/follower'
 ```
@@ -166,11 +166,11 @@ ros2 topic echo /static_camera/depth/camera_info --once
 ### 7.1 终端 3：打开 RViz
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
-rviz2 -d ~/ros2_ws/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz
+rviz2 -d ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_debug.rviz
 ```
 
 这个 RViz 配置默认会显示：
@@ -186,9 +186,9 @@ rviz2 -d ~/ros2_ws/src/so101-ros-physical-ai/so101_bringup/rviz/vision_overhead_
 ### 7.2 终端 4：打开 RGB 图像窗口
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
 rqt_image_view /static_camera/image_raw
 ```
@@ -196,9 +196,9 @@ rqt_image_view /static_camera/image_raw
 ### 7.3 终端 5：打开 Depth 图像窗口
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
 rqt_image_view /static_camera/depth/image_raw
 ```
@@ -259,11 +259,11 @@ rqt_image_view /static_camera/depth/image_raw
 如果你想边看边动机械臂，可以额外开 joint GUI：
 
 ```bash
-cd ~/ros2_ws/src
+cd ${ROS2_WS:-$HOME/ros2_ws}/src
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/src/install/setup.bash
+source ${ROS2_WS:-$HOME/ros2_ws}/src/install/setup.bash
 
-python3 ~/ros2_ws/src/so101-ros-physical-ai/so101_bringup/scripts/so101_joint_gui.py \
+python3 ${ROS2_WS:-$HOME/ros2_ws}/src/so101-ros-physical-ai/so101_bringup/scripts/so101_joint_gui.py \
   --command-topic /follower/forward_controller/commands \
   --joint-state-topic /joint_states
 ```

@@ -84,7 +84,7 @@
 
 对应配置文件：
 
-- [assembly_calibration.yaml](/home/rog/ros2_ws/src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
+- [assembly_calibration.yaml](../src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
 
 ---
 
@@ -92,7 +92,7 @@
 
 当前工作区里的 udev 规则文件是：
 
-- [99-so101.rules](/home/rog/ros2_ws/config/99-so101.rules)
+- [99-so101.rules](../config/99-so101.rules)
 
 当前规则内容对应的是：
 
@@ -139,7 +139,7 @@ ID_MODEL_ID=55d4
 
 编辑这个文件：
 
-- [99-so101.rules](/home/rog/ros2_ws/config/99-so101.rules)
+- [99-so101.rules](../config/99-so101.rules)
 
 例如当前主臂 / 从臂规则是：
 
@@ -157,7 +157,7 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{seria
 修改好仓库里的规则后，执行：
 
 ```bash
-sudo cp /home/rog/ros2_ws/config/99-so101.rules /etc/udev/rules.d/99-so101.rules
+sudo cp ${ROS2_WS:-$HOME/ros2_ws}/config/99-so101.rules /etc/udev/rules.d/99-so101.rules
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
@@ -205,8 +205,13 @@ ls -l /dev/so101_leader /dev/so101_follower /dev/ttyACM*
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -280,8 +285,13 @@ PY
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -309,8 +319,13 @@ PY
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -325,8 +340,13 @@ PY
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -352,8 +372,13 @@ PY
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -375,12 +400,12 @@ PY
 
 当前工作区已经有现成脚本别名：
 
-- [assembly_helper.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/assembly_helper.py)
+- [assembly_helper.py](../src/so101_hx35hm_bridge/scripts/assembly_helper.py)
 
 让 `id=6` 回到中位：
 
 ```bash
-cd /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts
 python3 assembly_helper.py --servo-id 6 --pos 500 --device /dev/so101_leader --yes
 ```
 
@@ -396,12 +421,12 @@ python3 assembly_helper.py --servo-id 6 --pos 500 --device /dev/ttyACM0 --yes
 
 脚本：
 
-- [return_all_to_mid.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
+- [return_all_to_mid.py](../src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
 
 把 `1 2 3 4 5 6` 一起打到 `500`：
 
 ```bash
-cd /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts
 python3 return_all_to_mid.py --device /dev/so101_leader
 ```
 
@@ -424,7 +449,7 @@ python3 return_all_to_mid.py --device /dev/so101_leader --dry-run
 如果你更习惯统一用同一个脚本，也可以：
 
 ```bash
-cd /home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts
+cd ${ROS2_WS:-$HOME/ros2_ws}/src/so101_hx35hm_bridge/scripts
 python3 assembly_helper.py --servo-id 1 --pos 500 --device /dev/so101_leader --yes
 python3 assembly_helper.py --servo-id 2 --pos 500 --device /dev/so101_leader --yes
 python3 assembly_helper.py --servo-id 3 --pos 500 --device /dev/so101_leader --yes
@@ -438,8 +463,13 @@ python3 assembly_helper.py --servo-id 3 --pos 500 --device /dev/so101_leader --y
 
 ```bash
 python3 - <<'PY'
-import sys, time
-sys.path.insert(0, '/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller')
+import os
+import sys
+import time
+from pathlib import Path
+
+workspace = Path(os.environ.get("ROS2_WS", Path.home() / "ros2_ws"))
+sys.path.insert(0, str(workspace / "src/ros_robot_controller-ros2/src/ros_robot_controller"))
 from ros_robot_controller.ros_robot_controller_sdk import Board
 
 board = Board(device='/dev/so101_leader')
@@ -544,7 +574,7 @@ YES
 因为修改仓库文件本身还不够，你还必须执行：
 
 ```bash
-sudo cp /home/rog/ros2_ws/config/99-so101.rules /etc/udev/rules.d/99-so101.rules
+sudo cp ${ROS2_WS:-$HOME/ros2_ws}/config/99-so101.rules /etc/udev/rules.d/99-so101.rules
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
@@ -569,7 +599,7 @@ sudo udevadm trigger
 如果你现在拿到的是一块新的 STM32 板子和一批待编号舵机，建议按下面顺序做：
 
 1. 插入 STM32，读取 `ID_SERIAL_SHORT`
-2. 修改 [99-so101.rules](/home/rog/ros2_ws/config/99-so101.rules)
+2. 修改 [99-so101.rules](../config/99-so101.rules)
 3. 用 `sudo cp + udevadm` 安装规则
 4. 确认 `/dev/so101_leader` 或 `/dev/so101_follower` 出现
 5. 用 `battery / imu` 测试确认板子固件正常
@@ -587,15 +617,15 @@ sudo udevadm trigger
 ## 12. 本工作区里最常用的相关文件
 
 - 串口规则：
-  [99-so101.rules](/home/rog/ros2_ws/config/99-so101.rules)
+  [99-so101.rules](../config/99-so101.rules)
 - 装配脚本：
-  [so101_assembly_pose.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py)
+  [so101_assembly_pose.py](../src/so101_hx35hm_bridge/scripts/so101_assembly_pose.py)
 - 单舵机控制别名：
-  [assembly_helper.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/assembly_helper.py)
+  [assembly_helper.py](../src/so101_hx35hm_bridge/scripts/assembly_helper.py)
 - 全部回中：
-  [return_all_to_mid.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
+  [return_all_to_mid.py](../src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
 - 舵机编号示例：
-  [change_servo_id.py](/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py)
+  [change_servo_id.py](../src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py)
 - 当前装配映射配置：
-  [assembly_calibration.yaml](/home/rog/ros2_ws/src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
+  [assembly_calibration.yaml](../src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
 

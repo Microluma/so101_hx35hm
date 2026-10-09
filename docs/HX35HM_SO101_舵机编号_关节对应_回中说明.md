@@ -51,15 +51,15 @@
 
 这个对应关系在 `bridge_node.py` 里是固定的：
 
-- [bridge_node.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
+- [bridge_node.py](../src/so101_hx35hm_bridge/so101_hx35hm_bridge/bridge_node.py)
 
 ### 2.2 相关配置来源
 
 你当前工作空间里相关配置文件如下：
 
-- [follower_joints.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/follower_joints.yaml)
-- [leader_joints.yaml](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml)
-- [assembly_calibration.yaml](/home/rog/ros2_ws/src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
+- [follower_joints.yaml](../src/so101-ros-physical-ai/so101_bringup/config/hardware/follower_joints.yaml)
+- [leader_joints.yaml](../src/so101-ros-physical-ai/so101_bringup/config/hardware/leader_joints.yaml)
+- [assembly_calibration.yaml](../src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
 
 ---
 
@@ -101,8 +101,8 @@
 
 对应的启动入口也不同：
 
-- [leader_hx35hm.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/leader_hx35hm.launch.py)
-- [follower_hx35hm_moveit.launch.py](/home/rog/ros2_ws/src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
+- [leader_hx35hm.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/leader_hx35hm.launch.py)
+- [follower_hx35hm_moveit.launch.py](../src/so101-ros-physical-ai/so101_bringup/launch/follower_hx35hm_moveit.launch.py)
 
 ### 3.3 串口绑定原则
 
@@ -119,7 +119,7 @@
 
 对应规则文件：
 
-- [99-so101.rules](/home/rog/ros2_ws/config/99-so101.rules)
+- [99-so101.rules](../config/99-so101.rules)
 
 同步到系统后，不管这两块板枚举成 `ttyACM0` 还是 `ttyACM1`，ROS 和调试脚本都应该只使用：
 
@@ -140,7 +140,7 @@
 
 对应文件：
 
-- [assembly_calibration.yaml](/home/rog/ros2_ws/src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
+- [assembly_calibration.yaml](../src/so101_hx35hm_bridge/config/assembly_calibration.yaml)
 
 ### 4.2 当前默认方向
 
@@ -178,7 +178,7 @@
 
 对应脚本：
 
-- [change_servo_id.py](/home/rog/ros2_ws/src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py)
+- [change_servo_id.py](../src/ros_robot_controller-ros2/src/ros_robot_controller/ros_robot_controller/change_servo_id.py)
 
 ### 4.4 给舵机编号时的安全原则
 
@@ -232,8 +232,8 @@ HX-35HM 默认角度映射是：
 
 对应脚本：
 
-- [return_to_home.py](/home/rog/ros2_ws/tools/hardware_debug/return_to_home.py)
-- [return_all_to_mid.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
+- [return_to_home.py](../tools/hardware_debug/return_to_home.py)
+- [return_all_to_mid.py](../src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
 
 ### 5.2 回到“关节零位 / 软件 home”
 
@@ -271,7 +271,7 @@ HX-35HM 默认角度映射是：
 
 脚本路径：
 
-- [return_to_home.py](/home/rog/ros2_ws/tools/hardware_debug/return_to_home.py)
+- [return_to_home.py](../tools/hardware_debug/return_to_home.py)
 
 ### 6.2 `src/so101_hx35hm_bridge/scripts/return_all_to_mid.py`
 
@@ -293,7 +293,7 @@ HX-35HM 默认角度映射是：
 
 脚本路径：
 
-- [return_all_to_mid.py](/home/rog/ros2_ws/src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
+- [return_all_to_mid.py](../src/so101_hx35hm_bridge/scripts/return_all_to_mid.py)
 
 推荐用途：
 

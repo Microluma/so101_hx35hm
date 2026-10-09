@@ -6,7 +6,7 @@
 #   follower -> ATTRS{serial}=596F003872
 #
 # Install with:
-#   sudo cp /home/rog/ros2_ws/config/99-so101.rules /etc/udev/rules.d/99-so101.rules
+#   sudo cp "${ROS2_WS:-$HOME/ros2_ws}/config/99-so101.rules" /etc/udev/rules.d/99-so101.rules
 #   sudo udevadm control --reload-rules
 #   sudo udevadm trigger
 
